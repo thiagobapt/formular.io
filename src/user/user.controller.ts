@@ -18,15 +18,13 @@ export class UserController {
       return this.userService.findAll();
     }
 
-    @Get(':id')
-    findOne(@Param('id') user_id: UUID): Promise<User> {
+    @Get('id')
+    findOne(@Body('userId') user_id: UUID): Promise<User> {
       return this.userService.findOne(user_id);
     }
   
-    @Delete(':id')
-    remove(@Param('id') user_id: UUID): Promise<void> {
+    @Delete('id')
+    remove(@Body('userId') user_id: UUID): Promise<void> {
       return this.userService.remove(user_id);
     }
 }
-
-module.exports = UserController;

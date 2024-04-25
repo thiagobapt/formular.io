@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './users/user.module';
+import { UserModule } from './user/user.module';
+import { FormModule } from './form/form.module';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -9,12 +11,15 @@ import { UserModule } from './users/user.module';
       host: '127.0.0.1',
       port: 3306,
       username: 'root',
-      password: 'root',
-      database: 'test',
+      password: 'anima123',
+      database: 'formular',
+      entities: [],
       autoLoadEntities: true,
       synchronize: true,
     }),
     UserModule,
+    FormModule,
+    QuestionModule
   ],
 })
 export class AppModule {}

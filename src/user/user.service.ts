@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { UUID } from 'crypto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -11,8 +12,8 @@ export class UserService {
         private userRepository: Repository<User>,
     ) {}
 
-    async create(user: User): Promise<User> {
-        return this.userRepository.create(user)
+    async create(createUserDto: CreateUserDto): Promise<User> {
+        return this.userRepository.create(createUserDto);
     }
 
     findAll(): Promise<User[]> {
@@ -23,7 +24,7 @@ export class UserService {
         return this.userRepository.findOneBy({ user_id });
     }
 
-    async remove(id: UUID): Promise<void> {
-        await this.userRepository.delete(id);
+    async remove(user_id: UUID): Promise<void> {
+        await this.userRepository.delete(user_id);
     }
 }
