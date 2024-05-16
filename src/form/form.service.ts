@@ -13,7 +13,8 @@ export class FormService {
     ) {}
 
     async create(createFormDto: CreateFormDto): Promise<Form> {
-        return this.formRepository.create(createFormDto);
+        const form = this.formRepository.create(createFormDto);
+        return this.formRepository.save(form);
     }
 
     findAll(): Promise<Form[]> {

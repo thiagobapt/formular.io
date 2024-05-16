@@ -18,13 +18,13 @@ export class FormController {
       return this.formService.findAll();
     }
 
-    @Get('id')
-    findOne(@Body('formId') form_id: UUID): Promise<Form> {
+    @Get(':id')
+    findOne(@Param('formId') form_id: UUID): Promise<Form> {
       return this.formService.findOne(form_id);
     }
   
-    @Delete('id')
-    remove(@Body('formId') form_id: UUID): Promise<void> {
+    @Delete(':id')
+    remove(@Param('formId') form_id: UUID): Promise<void> {
       return this.formService.remove(form_id);
     }
 }
