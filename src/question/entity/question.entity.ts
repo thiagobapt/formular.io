@@ -1,5 +1,5 @@
 import { UUID, randomUUID } from "crypto";
-import { Form } from "src/form/entities/form.entity";
+import { Form } from "src/form/entity/form.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
 @Entity()

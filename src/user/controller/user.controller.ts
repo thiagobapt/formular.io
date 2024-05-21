@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { UserService } from './user.service';
-import { User } from './entities/user.entity';
+import { UserService } from '../service/user.service';
+import { User } from '../entity/user.entity';
 import { UUID } from 'crypto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Users")
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
@@ -18,13 +20,13 @@ export class UserController {
       return this.userService.findAll();
     }
 
-    @Get('id')
-    findOne(@Body('userId') user_id: UUID): Promise<User> {
+    @Get(':id')
+    findOne(@Param('userId') user_id: UUID): Promise<User> {
       return this.userService.findOne(user_id);
     }
   
-    @Delete('id')
-    remove(@Body('userId') user_id: UUID): Promise<void> {
+    @Delete(':id')
+    remove(@Param('userId') user_id: UUID): Promise<void> {
       return this.userService.remove(user_id);
     }
 }

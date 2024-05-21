@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateQuestionDto } from './dto/create-question.dto';
-import { UpdateQuestionDto } from './dto/update-question.dto';
+import { CreateQuestionDto, UpdateQuestionDto } from '../dto/create-question.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Question } from './entities/question.entity';
+import { Question } from '../entity/question.entity';
 import { Repository } from 'typeorm';
 import { UUID } from 'crypto';
 

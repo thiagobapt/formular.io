@@ -1,6 +1,6 @@
 import { UUID, randomUUID } from "crypto";
-import { Question } from "src/question/entities/question.entity";
-import { User } from "src/user/entities/user.entity";
+import { Question } from "src/question/entity/question.entity";
+import { User } from "src/user/entity/user.entity";
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany, BeforeInsert } from "typeorm"
 
 @Entity()

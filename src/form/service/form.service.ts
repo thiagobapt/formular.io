@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Form } from './entities/form.entity';
-import { CreateFormDto } from './dto/create-form.dto';
+import { Form } from '../entity/form.entity';
+import { CreateFormDto } from '../dto/create-form.dto';
 import { UUID } from 'crypto';
 
 @Injectable()

@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { FormService } from './form.service';
-import { CreateFormDto } from './dto/create-form.dto';
-import { Form } from './entities/form.entity';
+import { FormService } from '../service/form.service';
+import { CreateFormDto } from '../dto/create-form.dto';
+import { Form } from '../entity/form.entity';
 import { UUID } from 'crypto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Forms')
 @Controller('form')
 export class FormController {
     constructor(private readonly formService: FormService) {}

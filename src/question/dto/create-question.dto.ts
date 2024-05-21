@@ -1,6 +1,15 @@
-import { Form } from "src/form/entities/form.entity";
+import { PartialType } from "@nestjs/mapped-types";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsJSON, IsUUID } from "class-validator";
+import { UUID } from "crypto";
 
 export class CreateQuestionDto {
-    form: Form;
+    @ApiProperty()
+    @IsUUID()
+    formId: UUID;
+    @ApiProperty()
+    @IsJSON()
     question_body: JSON;
 }
+
+export class UpdateQuestionDto extends PartialType(CreateQuestionDto) {}
