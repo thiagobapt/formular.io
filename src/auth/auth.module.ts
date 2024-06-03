@@ -13,7 +13,7 @@ import { AuthService } from './service/auth.service';
 @Module({
   imports: [TypeOrmModule.forFeature([User]), 
     JwtModule.register({
-      secret: process.env.JWT_SECRET, 
+      secret: `${process.env.JWT_SECRET}`, 
       signOptions: { expiresIn: '60m' },
     }),
     UserModule,
