@@ -4,6 +4,7 @@ import { FormModule } from './form/form.module';
 import { QuestionModule } from './question/question.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
+import { AnswerModule } from './answer/answer.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { DatabaseModule } from './database/database.module';
     FormModule,
     QuestionModule,
     AuthModule,
-    DatabaseModule
+    DatabaseModule,
+    AnswerModule
   ],
 })
 export class AppModule {}

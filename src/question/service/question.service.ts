@@ -35,7 +35,7 @@ export class QuestionService {
     return await this.questionRepository.update(question, updateQuestionDto);
   }
 
-  remove(id: UUID) {
-    return `This action removes a #${id} question`;
+  async remove(id: UUID) {
+    return await this.questionRepository.delete({question_id: id})
   }
 }
