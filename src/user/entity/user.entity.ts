@@ -1,4 +1,5 @@
 import { UUID, randomUUID } from "crypto";
+import { Answer } from "src/answer/entities/answer.entity";
 import { Form } from "src/form/entity/form.entity";
 import { Entity, Column, PrimaryColumn, OneToMany, BeforeInsert } from "typeorm"
 
@@ -20,6 +21,9 @@ export class User {
   user_password: string;
 
   @OneToMany(type => Form, form => form.user)
-  form: Form
+  form: Form;
+
+  @OneToMany(type => Answer, answer => answer.user)
+  answer: Answer;
 
 }
