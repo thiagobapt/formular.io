@@ -21,12 +21,12 @@ export class FormController {
     }
 
     @Get(':id')
-    findOne(@Param('formId') form_id: UUID): Promise<Form> {
+    findOne(@Param('id') form_id: UUID): Promise<Form> {
       return this.formService.findOne(form_id);
     }
   
     @Delete(':id')
-    remove(@Param('formId') form_id: UUID): Promise<void> {
+    remove(@Param('id') form_id: UUID): Promise<void> {
       return this.formService.remove(form_id);
     }
 }
