@@ -1,9 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsJSON, IsUUID } from "class-validator";
+import { IsJSON, IsObject, IsOptional, IsUUID } from "class-validator";
 import { UUID } from "crypto";
 
 export class CreateAnswerDto {
     @ApiProperty()
+    @IsOptional()
     @IsUUID()
     answer_id: UUID;
     @ApiProperty()
@@ -16,6 +17,6 @@ export class CreateAnswerDto {
     @IsUUID()
     question_id: UUID;
     @ApiProperty()
-    @IsJSON()
+    @IsObject()
     answer_body: JSON;
 }

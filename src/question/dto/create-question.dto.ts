@@ -1,14 +1,18 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsJSON, IsUUID } from "class-validator";
-import { UUID } from "crypto";
+import { IsJSON, IsObject, IsOptional, IsUUID } from "class-validator";
+import { UUID, randomUUID } from "crypto";
 
 export class CreateQuestionDto {
+    @ApiProperty()
+    @IsOptional()
+    @IsUUID()
+    questionId: UUID;
     @ApiProperty()
     @IsUUID()
     formId: UUID;
     @ApiProperty()
-    @IsJSON()
+    @IsObject()
     question_body: JSON;
 }
 

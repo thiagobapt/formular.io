@@ -10,7 +10,7 @@ export class Question {
       nullable: false,
       default: randomUUID()
     })
-  question_id: UUID;
+  question_id: UUID = randomUUID();
 
   @ManyToOne(type => Form, form => form.form_id)
   @JoinColumn({name: "form_id", referencedColumnName: "form_id"})

@@ -1,7 +1,7 @@
 import { Question } from "src/question/entity/question.entity";
 import { User } from "src/user/entity/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { UUID } from "crypto";
+import { UUID, randomUUID } from "crypto";
 import { Form } from "src/form/entity/form.entity";
 
 @Entity()
@@ -10,7 +10,7 @@ export class Answer {
         length: 36,
         nullable: false
       })
-    answer_id: UUID;
+    answer_id: UUID = randomUUID();
     
     @ManyToOne(type => User, user => user.user_id, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     @JoinColumn({name: "user_id", referencedColumnName: "user_id"})
