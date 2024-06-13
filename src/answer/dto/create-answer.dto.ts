@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsJSON, IsObject, IsOptional, IsUUID } from "class-validator";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { IsOptional, IsString, IsUUID } from "class-validator";
 import { UUID } from "crypto";
 
 export class CreateAnswerDto {
@@ -17,6 +17,8 @@ export class CreateAnswerDto {
     @IsUUID()
     question_id: UUID;
     @ApiProperty()
-    @IsObject()
-    answer_body: JSON;
+    @IsString()
+    answer: string;
 }
+
+export class UpdateAnswerDto extends PartialType(CreateAnswerDto) {}
