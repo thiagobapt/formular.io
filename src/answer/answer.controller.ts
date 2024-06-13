@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { AnswerService } from './answer.service';
 import { CreateAnswerDto } from './dto/create-answer.dto';
-import { UpdateAnswerDto } from './dto/update-answer.dto';
+import { UpdateAnswerDto } from './dto/create-answer.dto';
 import { UUID } from 'crypto';
 import { ApiTags } from '@nestjs/swagger';
 
