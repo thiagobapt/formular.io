@@ -1,5 +1,5 @@
 import { PartialType } from "@nestjs/mapped-types";
-import { IsEmail, IsString, IsUUID } from "class-validator";
+import { IsDate, IsDateString, IsEmail, IsString, IsUUID } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 import { UUID, randomUUID } from "crypto";
 
@@ -16,6 +16,9 @@ export class CreateUserDto {
     @ApiProperty()
     @IsString()
     user_password: string;
+    @ApiProperty()
+    @IsDateString()
+    user_birthday: Date;
     
 }
 

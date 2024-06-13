@@ -34,15 +34,53 @@ export class UserService {
         }
     }
 
+    async resetPassword(userEmail: string, newPassword: string) {
+        const user = await this.userRepository.findOne({where: {user_email: userEmail}});
+
+        const saltOrRounds = 10; // o custo do processamento, 10 é geralmente suficiente
+        const hash = await bcrypt.hash(newPassword, saltOrRounds);
+        newPassword = hash; // substitui a senha original pelo hash
+
+        if(!user) throw new HttpException(
+          'Usuário não encontrado.',
+          HttpStatus.NOT_FOUND,
+        );
+
+        return await this.userRepository.update(user, {user_password: newPassword})
+    }
+
     findAll(): Promise<User[]> {
         return this.userRepository.find();
     }
 
-    findOne(user_id: UUID): Promise<User | null> {
-        return this.userRepository.findOneBy({ user_id });
+    async findOne(userId: UUID): Promise<User> {
+        const user = await this.userRepository.findOneBy({ user_id: userId });
+
+        if(!user) throw new HttpException(
+          'Usuário não encontrado.',
+          HttpStatus.NOT_FOUND,
+        );
+
+        return user;
     }
 
-    async remove(user_id: UUID): Promise<void> {
-        await this.userRepository.delete(user_id);
+    async findOneByEmail(userEmail) {
+      const user = await this.userRepository.findOneBy({user_email: userEmail});
+
+      if(!user) throw new HttpException(
+        'Usuário não encontrado.',
+        HttpStatus.NOT_FOUND,
+      );
+
+      return user;
+    }
+
+    async remove(userId: UUID): Promise<void> {
+        const result = await this.userRepository.delete(userId);
+
+        if(result.affected === 0) throw new HttpException(
+          'Usuário não encontrado.',
+          HttpStatus.NOT_FOUND,
+        );
     }
 }

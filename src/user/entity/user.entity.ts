@@ -17,6 +17,14 @@ export class User {
   @Column({ nullable: false })
   user_name: string;
 
+  @Column({ nullable: false, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: string) => new Date(value)
+    }
+  })
+  user_birthday: Date;
+
   @Column({ nullable: false })
   user_password: string;
 
