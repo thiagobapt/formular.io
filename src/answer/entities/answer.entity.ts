@@ -24,7 +24,7 @@ export class Answer {
     @JoinColumn({name: "question_id", referencedColumnName: "question_id"})
     question: Question;
 
-    @Column({ nullable: false,  type: 'json' })
-    answer_body: JSON;
+    @Column({ nullable: false })
+    answer: string;
     
 }
