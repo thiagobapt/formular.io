@@ -1,16 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { QuestionService } from '../service/question.service';
 import { CreateMultiLineDissertativeDto, CreateMultipleChoiceDto, CreateOneLineDissertativeDto, CreateQuestionDto, UpdateMultiLineDissertativeDto, UpdateMultipleChoiceDto, UpdateOneLineDissertativeDto, UpdateQuestionDto } from '../dto/create-question.dto';
 import { UUID } from 'crypto';
 import { ApiTags } from '@nestjs/swagger';
-import OneLineDissertative from 'src/Classes/QuestionTypes/Dissertative/OneLineDissertative';
 import { QuestionType } from 'src/Enums/QuestionTypes';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard.strategy';
 
 @ApiTags('Questions')
 @Controller('question')
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('one-line-dissertative')
   createOneLineDissertative(@Body() questionDto: CreateOneLineDissertativeDto) {
     const question = new CreateQuestionDto;
@@ -27,6 +28,7 @@ export class QuestionController {
     return this.questionService.create(question);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('multi-line-dissertative')
   createMultiLineDissertative(@Body() questionDto: CreateMultiLineDissertativeDto) {
     const question = new CreateQuestionDto;
@@ -43,6 +45,7 @@ export class QuestionController {
     return this.questionService.create(question);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('multiple-choice')
   createMultipleChoice(@Body() questionDto: CreateMultipleChoiceDto) {
     const question = new CreateQuestionDto;
@@ -80,21 +83,25 @@ export class QuestionController {
     return this.questionService.create(question);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.questionService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: UUID) {
     return this.questionService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('form/:id')
   findAllByFormId(@Param('id') id: UUID) {
     return this.questionService.findAllByFormId(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('one-line-dissertative/:id')
   updateOneLineDissertative(@Param('id') id: UUID, @Body() questionDto: UpdateOneLineDissertativeDto) {
     const question = new UpdateQuestionDto;
@@ -111,6 +118,7 @@ export class QuestionController {
     return this.questionService.update(id, question);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('multi-line-dissertative/:id')
   updateMultiLineDissertative(@Param('id') id: UUID, @Body() questionDto: UpdateMultiLineDissertativeDto) {
     const question = new UpdateQuestionDto;
@@ -127,6 +135,7 @@ export class QuestionController {
     return this.questionService.update(id, question);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('multiple-choice/:id')
   updateMultipleChoice(@Param('id') id: UUID, @Body() questionDto: UpdateMultipleChoiceDto) {
     const question = new UpdateQuestionDto;
@@ -164,6 +173,7 @@ export class QuestionController {
     return this.questionService.update(id, question);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: UUID) {
     return this.questionService.remove(id);
