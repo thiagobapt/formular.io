@@ -90,6 +90,11 @@ export class QuestionController {
     return this.questionService.findOne(id);
   }
 
+  @Get('form/:id')
+  findAllByFormId(@Param('id') id: UUID) {
+    return this.questionService.findAllByFormId(id);
+  }
+
   @Patch('one-line-dissertative/:id')
   updateOneLineDissertative(@Param('id') id: UUID, @Body() questionDto: UpdateOneLineDissertativeDto) {
     const question = new UpdateQuestionDto;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateQuestionDto, UpdateQuestionDto } from '../dto/create-question.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Question } from '../entity/question.entity';
@@ -20,6 +20,17 @@ export class QuestionService {
 
   async findAll() {
     return await this.questionRepository.find();
+  }
+
+  async findAllByFormId(formId: UUID) {
+    const questions = await this.questionRepository.find({where: {form: {form_id: formId}}});
+
+    if(questions.length === 0) throw new HttpException(
+      'Nenhuma pergunta encontrada com este ID de formulário.',
+      HttpStatus.NOT_FOUND,
+    );
+
+    return questions;
   }
 
   async findOne(id: UUID): Promise<Question> {
