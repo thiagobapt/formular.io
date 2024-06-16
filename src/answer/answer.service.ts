@@ -59,9 +59,11 @@ export class AnswerService {
     const forms = [];
 
     for(const answer of answers) {
-      if(!forms.includes(answer.form)) {
-        forms.push(answer.form);
+      let found = false;
+      for(const form of forms) {
+        if(form.form_id === answer.form.form_id) found = true;
       }
+      if(!found) forms.push(answer.form)
     }
 
     return forms;
