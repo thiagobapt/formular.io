@@ -13,7 +13,10 @@ export class FormService {
     ) {}
 
     async create(createFormDto: CreateFormDto): Promise<Form> {
-        const form = this.formRepository.create(createFormDto);
+        const form = this.formRepository.create({
+            user: {user_id: createFormDto.user_id},
+            form_name: createFormDto.form_name
+        });
         return this.formRepository.save(form);
     }
 
