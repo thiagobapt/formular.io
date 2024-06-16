@@ -36,6 +36,11 @@ export class AnswerController {
     return this.answerService.findAllByQuestionId(id);
   }
 
+  @Get('user/:id')
+  findAllAnsweredFormByUserId(@Param('id') id: UUID) {
+    return this.answerService.findAnsweredFormsByUserId(id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: UUID, @Body() updateAnswerDto: UpdateAnswerDto) {
     return this.answerService.update(id, updateAnswerDto);
