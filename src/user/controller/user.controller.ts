@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { UserService } from '../service/user.service';
 import { User } from '../entity/user.entity';
 import { UUID } from 'crypto';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags("Users")
@@ -28,6 +28,11 @@ export class UserController {
     @Delete(':id')
     async remove(@Param('id') userId: UUID): Promise<void> {
       return await this.userService.remove(userId);
+    }
+
+    @Patch(':id')
+    async update(@Param('id') id: UUID, @Body() updateUserDto: UpdateUserDto) {
+      return await this.userService.update(id, updateUserDto);
     }
 
     @Patch(':email/resetPassword/:password')

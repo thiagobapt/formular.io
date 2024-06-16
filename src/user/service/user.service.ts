@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
 import { UUID } from 'crypto';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -32,6 +32,17 @@ export class UserService {
             );
           }
         }
+    }
+
+    async update(userId: UUID, updateUserDto: UpdateUserDto) {
+        const user = await this.userRepository.findOne({where: {user_id: userId}});
+
+        if(!user) throw new HttpException(
+          'Usuário não encontrado.',
+          HttpStatus.NOT_FOUND,
+        );
+
+        return await this.userRepository.update(user, updateUserDto)
     }
 
     async resetPassword(userEmail: string, newPassword: string) {
