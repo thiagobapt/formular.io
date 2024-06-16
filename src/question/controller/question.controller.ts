@@ -41,13 +41,6 @@ export class QuestionController {
 
     const checkPrevChoices: string[] = [];
 
-    if(!questionDto.question_body.choices.some(value => value === questionDto.question_body.correctAnswer)) {
-      throw new HttpException(
-        `A escolha correta não está entre as escolhas definidas.`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     for (const choice of questionDto.question_body.choices) {
       if(checkPrevChoices.some(value => value === choice)) {
         throw new HttpException(
@@ -114,13 +107,6 @@ export class QuestionController {
     questionDto.question_body.questionType = QuestionType.MultipleChoice;
 
     const checkPrevChoices: string[] = [];
-
-    if(!questionDto.question_body.choices.some(value => value === questionDto.question_body.correctAnswer)) {
-      throw new HttpException(
-        `A escolha correta não está entre as escolhas definidas.`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     for (const choice of questionDto.question_body.choices) {
       if(checkPrevChoices.some(value => value === choice)) {
