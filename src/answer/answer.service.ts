@@ -14,7 +14,11 @@ export class AnswerService {
   ) {}
 
   create(createAnswerDto: CreateAnswerDto) {
-    const answer = this.answerRepository.create(createAnswerDto);
+    const answer = this.answerRepository.create({
+      form: {form_id: createAnswerDto.form_id},
+      question: {question_id: createAnswerDto.question_id},
+      answer: createAnswerDto.answer,
+      user: {user_id: createAnswerDto.user_id}});
     return this.answerRepository.save(answer);
   }
 
