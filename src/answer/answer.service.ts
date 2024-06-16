@@ -48,6 +48,25 @@ export class AnswerService {
     return answers;
   }
 
+  async findAnsweredFormsByUserId(id: UUID) {
+    const answers = await this.answerRepository.find({where: {user: {user_id: id} }, relations: {form: true}});
+    
+    if(answers.length === 0) throw new HttpException(
+      'Nenhum formulário respondido.',
+      HttpStatus.NOT_FOUND,
+    );
+
+    const forms = [];
+
+    for(const answer of answers) {
+      if(!forms.includes(answer.form)) {
+        forms.push(answer.form);
+      }
+    }
+
+    return forms;
+  }
+
   async findOne(id: UUID) {
     const answer = await this.answerRepository.findOne({where: {answer_id: id}, relations: {user: true, form: true, question: true}});
 

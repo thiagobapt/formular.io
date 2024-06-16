@@ -5,7 +5,7 @@ import { UUID, randomUUID } from "crypto";
 export class CreateUserDto {
     @ApiProperty()
     @IsUUID()
-    user_id: UUID = randomUUID();
+    user_id: UUID;
     @ApiProperty()
     @IsEmail()
     user_email: string;

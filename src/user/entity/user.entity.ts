@@ -9,7 +9,7 @@ export class User {
     length: 36,
     nullable: false
   })
-  user_id: UUID;
+  user_id: UUID = randomUUID();
 
   @Column({ nullable: false, unique: true })
   user_email: string;

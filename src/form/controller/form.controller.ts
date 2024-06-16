@@ -25,6 +25,11 @@ export class FormController {
     findOne(@Param('id') form_id: UUID): Promise<Form> {
       return this.formService.findOne(form_id);
     }
+
+    @Get('user/:id')
+    findAllByUserId(@Param('id') user_id: UUID): Promise<Form> {
+      return this.formService.findAllByUserId(user_id);
+    }
     
     @Delete(':id')
     remove(@Param('id') form_id: UUID): Promise<void> {
