@@ -13,7 +13,7 @@ export class QuestionService {
 ) {}
 
   async create(createQuestionDto: CreateQuestionDto): Promise<Question> {
-    const question = this.questionRepository.create(createQuestionDto);
+    const question = this.questionRepository.create({form: {form_id: createQuestionDto.formId}, question_body: createQuestionDto.question_body});
 
     return await this.questionRepository.save(question);
   }
