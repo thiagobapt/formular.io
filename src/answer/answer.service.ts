@@ -27,7 +27,7 @@ export class AnswerService {
   }
 
   async findAllByFormId(id: UUID) {
-    const answers = await this.answerRepository.find({where: {form: {form_id: id}}});
+    const answers = await this.answerRepository.find({where: {form: {form_id: id}}, relations: {user: true, form: true, question: true}});
 
     if(answers.length === 0) throw new HttpException(
       'Resposta não encontrada.',
@@ -38,7 +38,7 @@ export class AnswerService {
   }
 
   async findAllByQuestionId(id: UUID) {
-    const answers = await this.answerRepository.find({where: {question: {question_id: id}}});
+    const answers = await this.answerRepository.find({where: {question: {question_id: id}}, relations: {user: true, form: true, question: true}});
 
     if(answers.length === 0) throw new HttpException(
       'Resposta não encontrada.',
@@ -49,7 +49,7 @@ export class AnswerService {
   }
 
   async findOne(id: UUID) {
-    const answer = await this.answerRepository.findOneBy({answer_id: id});
+    const answer = await this.answerRepository.findOne({where: {answer_id: id}, relations: {user: true, form: true, question: true}});
 
     if(!answer) throw new HttpException(
       'Resposta não encontrada.',
@@ -62,7 +62,7 @@ export class AnswerService {
   async update(id: UUID, updateAnswerDto: UpdateAnswerDto) {
     const answer = await this.answerRepository.findOne({ where: {
         answer_id: id
-      }
+      }, relations: {user: true, form: true, question: true}
     })
 
     if(!answer) throw new HttpException(

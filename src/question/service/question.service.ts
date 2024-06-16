@@ -23,7 +23,7 @@ export class QuestionService {
   }
 
   async findAllByFormId(formId: UUID) {
-    const questions = await this.questionRepository.find({where: {form: {form_id: formId}}});
+    const questions = await this.questionRepository.find({where: {form: {form_id: formId}}, relations: {form: true}});
 
     if(questions.length === 0) throw new HttpException(
       'Nenhuma pergunta encontrada com este ID de formulário.',
@@ -36,7 +36,7 @@ export class QuestionService {
   async findOne(id: UUID): Promise<Question> {
     return await this.questionRepository.findOne({ where: {
       question_id: id
-    } })
+    }, relations: {form: true} })
   }
 
   async update(id: UUID, updateQuestionDto: UpdateQuestionDto) {

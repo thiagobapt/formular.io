@@ -21,11 +21,11 @@ export class FormService {
     }
 
     findAll(): Promise<Form[]> {
-        return this.formRepository.find();
+        return this.formRepository.find({relations: {user: true}});
     }
 
     findOne(form_id: UUID): Promise<Form | null> {
-        return this.formRepository.findOneBy({ form_id });
+        return this.formRepository.findOne({ where: {form_id: form_id}, relations: {user: true} });
     }
 
     async remove(form_id: UUID): Promise<void> {
