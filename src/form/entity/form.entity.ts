@@ -23,10 +23,10 @@ export class Form {
   @Column({ nullable: false })
   form_name: string;
 
-  @OneToMany(type => Question, question => question.form)
+  @OneToMany(type => Question, question => question.form, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   question: Question;
 
-  @OneToMany(type => Answer, answer => answer.form)
+  @OneToMany(type => Answer, answer => answer.form, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   answer: Answer
 
 }

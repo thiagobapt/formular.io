@@ -16,11 +16,11 @@ export class Answer {
     @JoinColumn({name: "user_id", referencedColumnName: "user_id"})
     user: User;
     
-    @ManyToOne(type => Form, form => form.form_id)
+    @ManyToOne(type => Form, form => form.form_id, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     @JoinColumn({name: "form_id", referencedColumnName: "form_id"})
     form: Form;
     
-    @ManyToOne(type => Question, question => question.question_id)
+    @ManyToOne(type => Question, question => question.question_id, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     @JoinColumn({name: "question_id", referencedColumnName: "question_id"})
     question: Question;
 

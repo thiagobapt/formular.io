@@ -28,10 +28,10 @@ export class User {
   @Column({ nullable: false })
   user_password: string;
 
-  @OneToMany(type => Form, form => form.user)
+  @OneToMany(type => Form, form => form.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   form: Form;
 
-  @OneToMany(type => Answer, answer => answer.user)
+  @OneToMany(type => Answer, answer => answer.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   answer: Answer;
 
 }
