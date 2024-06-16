@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
-import { UUID } from 'crypto';
+import { UUID, randomUUID } from 'crypto';
 import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 
@@ -18,7 +18,7 @@ export class UserService {
           const saltOrRounds = 10; // o custo do processamento, 10 é geralmente suficiente
           const hash = await bcrypt.hash(createUserDto.user_password, saltOrRounds);
           createUserDto.user_password = hash; // substitui a senha original pelo hash
-    
+          createUserDto.user_id = randomUUID();
           return await this.userRepository.save(
             this.userRepository.create(createUserDto),
           );

@@ -1,9 +1,10 @@
-import { IsDate, IsDateString, IsEmail, IsString, IsUUID } from "class-validator";
+import { IsDate, IsDateString, IsEmail, IsObject, IsOptional, IsString, IsUUID } from "class-validator";
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { UUID, randomUUID } from "crypto";
 
 export class CreateUserDto {
     @ApiProperty()
+    @IsOptional()
     @IsUUID()
     user_id: UUID;
     @ApiProperty()
