@@ -25,7 +25,7 @@ export class FormService {
     }
 
     findOne(form_id: UUID): Promise<Form | null> {
-        return this.formRepository.findOne({ where: {form_id: form_id}, relations: {user: true} });
+        return this.formRepository.findOne({ where: {form_id: form_id}, relations: {user: true, question: true} });
     }
 
     findAllByUserId(user_id: UUID): Promise<Form[] | null> {
