@@ -27,7 +27,7 @@ export class FormController {
     }
 
     @Get('user/:id')
-    findAllByUserId(@Param('id') user_id: UUID): Promise<Form> {
+    findAllByUserId(@Param('id') user_id: UUID): Promise<Form[]> {
       return this.formService.findAllByUserId(user_id);
     }
     
