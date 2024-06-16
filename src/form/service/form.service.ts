@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Form } from '../entity/form.entity';
-import { CreateFormDto } from '../dto/create-form.dto';
+import { CreateFormDto, UpdateFormDto } from '../dto/create-form.dto';
 import { UUID } from 'crypto';
 
 @Injectable()
@@ -34,5 +34,13 @@ export class FormService {
 
     async remove(form_id: UUID): Promise<void> {
         await this.formRepository.delete(form_id);
+    }
+
+    async update(form_id: UUID, updateFormDto: UpdateFormDto): Promise<void> {
+        const form = await this.formRepository.findOne({where: {form_id: form_id}});
+
+        if(!form) throw new HttpException('Formulário não foi encontrado.', HttpStatus.NOT_FOUND,);
+
+        await this.formRepository.update(form.form_id, updateFormDto);
     }
 }

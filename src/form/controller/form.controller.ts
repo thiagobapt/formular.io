@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { FormService } from '../service/form.service';
-import { CreateFormDto } from '../dto/create-form.dto';
+import { CreateFormDto, UpdateFormDto } from '../dto/create-form.dto';
 import { Form } from '../entity/form.entity';
 import { UUID } from 'crypto';
 import { ApiTags } from '@nestjs/swagger';
@@ -34,5 +34,10 @@ export class FormController {
     @Delete(':id')
     remove(@Param('id') form_id: UUID): Promise<void> {
       return this.formService.remove(form_id);
+    }
+
+    @Patch(':id')
+    update(@Param('id') form_id: UUID, @Body() updateFormDto: UpdateFormDto): Promise<void> {
+      return this.formService.update(form_id, updateFormDto);
     }
 }
