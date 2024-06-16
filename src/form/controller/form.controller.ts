@@ -22,7 +22,7 @@ export class FormController {
     }
 
     @Get(':id')
-    findOne(@Param('id') form_id: UUID): Promise<Form[]> {
+    findOne(@Param('id') form_id: UUID): Promise<Form> {
       return this.formService.findOne(form_id);
     }
 
