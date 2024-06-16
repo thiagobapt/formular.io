@@ -17,11 +17,6 @@ export class QuestionController {
     question.formId = questionDto.formId;
     questionDto.question_body.characterLimit = 100;
 
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
-
     questionDto.question_body.questionType = QuestionType.OneLineDissertative;
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
     return this.questionService.create(question);
@@ -33,11 +28,6 @@ export class QuestionController {
     question.formId = questionDto.formId;
     questionDto.question_body.characterLimit = 2000;
     questionDto.question_body.questionType = QuestionType.MultiLineDissertative;
-
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
     
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
     return this.questionService.create(question);
@@ -101,11 +91,6 @@ export class QuestionController {
     question.formId = questionDto.formId;
     questionDto.question_body.characterLimit = 100;
 
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
-
     questionDto.question_body.questionType = QuestionType.OneLineDissertative;
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
     return this.questionService.update(id, question);
@@ -118,11 +103,6 @@ export class QuestionController {
     questionDto.question_body.characterLimit = 2000;
     questionDto.question_body.questionType = QuestionType.MultiLineDissertative;
 
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
-    
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
     return this.questionService.update(id, question);
   }
