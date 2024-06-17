@@ -12,14 +12,14 @@ export class Question {
     })
   question_id: UUID = randomUUID();
 
-  @ManyToOne(type => Form, form => form.form_id)
+  @ManyToOne(type => Form, form => form.form_id, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   @JoinColumn({name: "form_id", referencedColumnName: "form_id"})
   form: Form;
 
   @Column({ nullable: false,  type: 'json' })
   question_body: JSON;
 
-  @OneToMany(type => Answer, answer => answer.question)
+  @OneToMany(type => Answer, answer => answer.question, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   answer: Answer
 
 }

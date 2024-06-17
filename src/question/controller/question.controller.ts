@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { QuestionService } from '../service/question.service';
 import { CreateMultiLineDissertativeDto, CreateMultipleChoiceDto, CreateOneLineDissertativeDto, CreateQuestionDto, UpdateMultiLineDissertativeDto, UpdateMultipleChoiceDto, UpdateOneLineDissertativeDto, UpdateQuestionDto } from '../dto/create-question.dto';
 import { UUID } from 'crypto';
 import { ApiTags } from '@nestjs/swagger';
-import OneLineDissertative from 'src/Classes/QuestionTypes/Dissertative/OneLineDissertative';
 import { QuestionType } from 'src/Enums/QuestionTypes';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard.strategy';
 
 @ApiTags('Questions')
 @Controller('question')
@@ -17,11 +17,6 @@ export class QuestionController {
     question.formId = questionDto.formId;
     questionDto.question_body.characterLimit = 100;
 
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
-
     questionDto.question_body.questionType = QuestionType.OneLineDissertative;
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
     return this.questionService.create(question);
@@ -33,11 +28,6 @@ export class QuestionController {
     question.formId = questionDto.formId;
     questionDto.question_body.characterLimit = 2000;
     questionDto.question_body.questionType = QuestionType.MultiLineDissertative;
-
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
     
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
     return this.questionService.create(question);
@@ -50,13 +40,6 @@ export class QuestionController {
     questionDto.question_body.questionType = QuestionType.MultipleChoice;
 
     const checkPrevChoices: string[] = [];
-
-    if(!questionDto.question_body.choices.some(value => value === questionDto.question_body.correctAnswer)) {
-      throw new HttpException(
-        `A escolha correta não está entre as escolhas definidas.`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     for (const choice of questionDto.question_body.choices) {
       if(checkPrevChoices.some(value => value === choice)) {
@@ -90,16 +73,16 @@ export class QuestionController {
     return this.questionService.findOne(id);
   }
 
+  @Get('form/:id')
+  findAllByFormId(@Param('id') id: UUID) {
+    return this.questionService.findAllByFormId(id);
+  }
+
   @Patch('one-line-dissertative/:id')
   updateOneLineDissertative(@Param('id') id: UUID, @Body() questionDto: UpdateOneLineDissertativeDto) {
     const question = new UpdateQuestionDto;
     question.formId = questionDto.formId;
     questionDto.question_body.characterLimit = 100;
-
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
 
     questionDto.question_body.questionType = QuestionType.OneLineDissertative;
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
@@ -113,11 +96,6 @@ export class QuestionController {
     questionDto.question_body.characterLimit = 2000;
     questionDto.question_body.questionType = QuestionType.MultiLineDissertative;
 
-    if(questionDto.question_body.correctAnswer.length > questionDto.question_body.characterLimit) throw new HttpException(
-      `A resposta correta deve ter no máximo ${questionDto.question_body.characterLimit} caractéres.`,
-      HttpStatus.BAD_REQUEST,
-    );
-    
     question.question_body = JSON.parse(JSON.stringify(questionDto.question_body));
     return this.questionService.update(id, question);
   }
@@ -129,13 +107,6 @@ export class QuestionController {
     questionDto.question_body.questionType = QuestionType.MultipleChoice;
 
     const checkPrevChoices: string[] = [];
-
-    if(!questionDto.question_body.choices.some(value => value === questionDto.question_body.correctAnswer)) {
-      throw new HttpException(
-        `A escolha correta não está entre as escolhas definidas.`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     for (const choice of questionDto.question_body.choices) {
       if(checkPrevChoices.some(value => value === choice)) {

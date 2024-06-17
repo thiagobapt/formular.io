@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
-import { UUID } from 'crypto';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { UUID, randomUUID } from 'crypto';
+import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class UserService {
           const saltOrRounds = 10; // o custo do processamento, 10 é geralmente suficiente
           const hash = await bcrypt.hash(createUserDto.user_password, saltOrRounds);
           createUserDto.user_password = hash; // substitui a senha original pelo hash
-    
+          createUserDto.user_id = randomUUID();
           return await this.userRepository.save(
             this.userRepository.create(createUserDto),
           );
@@ -32,6 +32,17 @@ export class UserService {
             );
           }
         }
+    }
+
+    async update(userId: UUID, updateUserDto: UpdateUserDto) {
+        const user = await this.userRepository.findOne({where: {user_id: userId}});
+
+        if(!user) throw new HttpException(
+          'Usuário não encontrado.',
+          HttpStatus.NOT_FOUND,
+        );
+
+        return await this.userRepository.update(user, updateUserDto)
     }
 
     async resetPassword(userEmail: string, newPassword: string) {

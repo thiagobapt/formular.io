@@ -9,7 +9,7 @@ export class User {
     length: 36,
     nullable: false
   })
-  user_id: UUID;
+  user_id: UUID = randomUUID();
 
   @Column({ nullable: false, unique: true })
   user_email: string;
@@ -28,10 +28,10 @@ export class User {
   @Column({ nullable: false })
   user_password: string;
 
-  @OneToMany(type => Form, form => form.user)
+  @OneToMany(type => Form, form => form.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   form: Form;
 
-  @OneToMany(type => Answer, answer => answer.user)
+  @OneToMany(type => Answer, answer => answer.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
   answer: Answer;
 
 }
