@@ -43,7 +43,7 @@ export class QuestionService {
     const question = await this.questionRepository.findOne({ where: {
       question_id: id
     } })
-    return await this.questionRepository.update(question, updateQuestionDto);
+    return await this.questionRepository.update(question.question_id, updateQuestionDto);
   }
 
   async remove(id: UUID) {
