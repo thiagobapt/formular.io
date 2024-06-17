@@ -46,7 +46,7 @@ describe('FormController', () => {
   describe('create', () => {
     it('should create a form', async () => {
       const createFormDto: CreateFormDto = {
-        userId: uuidv4(),
+        user_id: uuidv4(),
         form_name: 'Test Form',
       };
 
