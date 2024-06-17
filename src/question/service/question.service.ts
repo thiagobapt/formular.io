@@ -43,6 +43,12 @@ export class QuestionService {
     const question = await this.questionRepository.findOne({ where: {
       question_id: id
     } })
+
+    if(!question) throw new HttpException(
+      'Nenhuma pergunta encontrada com este ID.',
+      HttpStatus.NOT_FOUND,
+    );
+
     return await this.questionRepository.update(question.question_id, updateQuestionDto);
   }
 
