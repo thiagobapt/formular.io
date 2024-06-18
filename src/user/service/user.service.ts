@@ -65,7 +65,7 @@ export class UserService {
     }
 
     async findOne(userId: UUID): Promise<User> {
-        const user = await this.userRepository.findOneBy({ user_id: userId });
+        const user = await this.userRepository.findOne({ where: {user_id: userId} });
 
         if(!user) throw new HttpException(
           'Usuário não encontrado.',
@@ -75,8 +75,8 @@ export class UserService {
         return user;
     }
 
-    async findOneByEmail(userEmail) {
-      const user = await this.userRepository.findOneBy({user_email: userEmail});
+    async findOneByEmail(userEmail: string) {
+      const user = await this.userRepository.findOne({where: {user_email: userEmail}});
 
       if(!user) throw new HttpException(
         'Usuário não encontrado.',

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/user/entity/user.entity';
+import { User } from '../../user/entity/user.entity'; // Relative path
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 

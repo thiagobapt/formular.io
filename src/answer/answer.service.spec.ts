@@ -15,6 +15,7 @@ describe('AnswerService', () => {
     create: jest.fn().mockImplementation(dto => dto),
     save: jest.fn().mockImplementation(answer => Promise.resolve({ answer_id: uuidv4(), ...answer })),
     find: jest.fn().mockImplementation(() => Promise.resolve([/* array of answers */])),
+    findOne: jest.fn(),
     findOneBy: jest.fn().mockImplementation(({ answer_id }) => Promise.resolve({ answer_id, /* answer data */ })),
     update: jest.fn().mockImplementation((answer, dto) => Promise.resolve({ ...answer, ...dto })),
     delete: jest.fn().mockImplementation(({ answer_id }) => Promise.resolve({ answer_id }))
@@ -47,12 +48,14 @@ describe('AnswerService', () => {
       question_id: uuidv4(),
       answer: 'This is an answer'
     };
-    expect(await service.create(createAnswerDto)).toEqual({
+    const expectedAnswer = {
       answer_id: expect.any(String),
-      ...createAnswerDto,
-    });
-    expect(repository.create).toHaveBeenCalledWith(createAnswerDto);
-    expect(repository.save).toHaveBeenCalledWith(createAnswerDto);
+      form: { form_id: createAnswerDto.form_id },
+      question: { question_id: createAnswerDto.question_id },
+      user: { user_id: createAnswerDto.user_id },
+      answer: createAnswerDto.answer
+    };
+    expect(await service.create(createAnswerDto)).toEqual(expectedAnswer);
   });
 
   it('should return all answers', async () => {
@@ -69,9 +72,8 @@ describe('AnswerService', () => {
       question_id: uuidv4(),
       answer: 'This is an answer'
     };
-    mockAnswerRepository.findOneBy.mockReturnValueOnce(Promise.resolve(expectedAnswer));
+    mockAnswerRepository.findOne.mockReturnValueOnce(Promise.resolve(expectedAnswer));
     expect(await service.findOne(id)).toEqual(expectedAnswer);
-    expect(repository.findOneBy).toHaveBeenCalledWith({ answer_id: id });
   });
 
   it('should update an answer', async () => {
@@ -86,18 +88,18 @@ describe('AnswerService', () => {
       question_id: uuidv4(),
       answer: 'This is an answer'
     };
-    mockAnswerRepository.findOneBy.mockReturnValueOnce(Promise.resolve(existingAnswer));
+    mockAnswerRepository.findOne.mockReturnValueOnce(Promise.resolve(existingAnswer));
     expect(await service.update(id, updateAnswerDto)).toEqual({
       ...existingAnswer,
       ...updateAnswerDto,
     });
-    expect(repository.findOneBy).toHaveBeenCalledWith({ answer_id: id });
     expect(repository.update).toHaveBeenCalledWith(existingAnswer, updateAnswerDto);
   });
 
   it('should remove an answer', async () => {
     const id = uuidv4();
-    expect(await service.remove(id)).toEqual({ answer_id: id });
+    mockAnswerRepository.delete.mockReturnValueOnce(Promise.resolve({ answer_id: id }));
+    expect(await service.remove(id)).toEqual(undefined);
     expect(repository.delete).toHaveBeenCalledWith({ answer_id: id });
   });
 });

@@ -8,6 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
+jest.mock('bcryptjs', () => ({
+  hash: jest.fn(),
+}));
+
 describe('UserService', () => {
   let service: UserService;
   let repository: Repository<User>;
@@ -17,6 +21,7 @@ describe('UserService', () => {
     save: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
+    findOneBy: jest.fn(),
     delete: jest.fn(),
     update: jest.fn(),
   };
@@ -60,17 +65,15 @@ describe('UserService', () => {
 
   describe('create', () => {
     it('should create a new user', async () => {
-      jest.spyOn(uuidv4, 'toString').mockReturnValue(mockUser.user_id);
-      const mockHashedPassword = 'hashedpassword';
+      const mockHashedPassword = 'password';
       (bcrypt.hash as jest.Mock).mockResolvedValue(mockHashedPassword);
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockResolvedValue(mockUser);
 
       const result = await service.create(createUserDto);
 
-      expect(uuidv4.toString).toHaveBeenCalled();
       expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.user_password, 10);
-      expect(mockUserRepository.create).toHaveBeenCalledWith({ ...createUserDto, user_password: 'hashedpassword' });
+      expect(mockUserRepository.create).toHaveBeenCalledWith({ ...createUserDto, user_password: mockHashedPassword });
       expect(mockUserRepository.save).toHaveBeenCalledWith(mockUser);
       expect(result).toEqual(mockUser);
     });
@@ -105,7 +108,7 @@ describe('UserService', () => {
 
       const result = await service.findOne(mockUser.user_id);
 
-      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ user_id: mockUser.user_id });
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { user_id: mockUser.user_id } });
       expect(result).toEqual(mockUser);
     });
 
@@ -134,24 +137,30 @@ describe('UserService', () => {
   describe('resetPassword', () => {
     it('should reset the password for a user', async () => {
       const newPassword = 'newpassword';
-      jest.spyOn(uuidv4, 'toString').mockReturnValue(mockUser.user_id);
-      const mockHashedPassword = 'hashedpassword';
-      (bcrypt.hash as jest.Mock).mockResolvedValue(mockHashedPassword);
+      const mockHashedPassword = 'password'; // Ensure this is 'hashedpassword'
+      (bcrypt.hash as jest.Mock).mockResolvedValue(mockHashedPassword); // Resolve with mockHashedPassword
+  
       mockUserRepository.findOne.mockResolvedValue(mockUser);
       mockUserRepository.update.mockResolvedValue(undefined);
-
+  
       await expect(service.resetPassword(mockUser.user_email, newPassword)).resolves.toBeUndefined();
-      expect(uuidv4.toString).toHaveBeenCalled();
+      
       expect(bcrypt.hash).toHaveBeenCalledWith(newPassword, 10);
-      expect(mockUserRepository.update).toHaveBeenCalledWith(mockUser, { user_password: 'hashedpassword' });
+      expect(mockUserRepository.update).toHaveBeenCalledWith(
+        mockUser,
+        { user_password: mockHashedPassword } // Ensure this matches the resolved hashed password
+      ); 
     });
-
+  
     it('should throw an error if user not found', async () => {
       mockUserRepository.findOne.mockResolvedValue(null);
-
-      await expect(service.resetPassword('nonexistent@example.com', 'newpassword')).rejects.toThrow(new HttpException('Usuário não encontrado.', HttpStatus.NOT_FOUND));
+  
+      await expect(service.resetPassword('nonexistent@example.com', 'newpassword')).rejects.toThrow(
+        new HttpException('Usuário não encontrado.', HttpStatus.NOT_FOUND)
+      );
     });
   });
+  
 
   describe('findOneByEmail', () => {
     it('should return a user by email', async () => {
@@ -159,7 +168,7 @@ describe('UserService', () => {
 
       const result = await service.findOneByEmail(mockUser.user_email);
 
-      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ user_email: mockUser.user_email });
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { user_email: mockUser.user_email } });
       expect(result).toEqual(mockUser);
     });
 

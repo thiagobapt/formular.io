@@ -9,6 +9,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 describe('UserController', () => {
   let controller: UserController;
   let service: UserService;
+  const date = new Date();
 
   const mockUserService = {
     create: jest.fn().mockImplementation((dto: CreateUserDto) => {
@@ -23,14 +24,14 @@ describe('UserController', () => {
         user_email: 'test1@example.com',
         user_name: 'Test User 1',
         user_password: 'password1',
-        user_birthday: new Date(),
+        user_birthday: date,
       },
       {
         user_id: uuidv4(),
         user_email: 'test2@example.com',
         user_name: 'Test User 2',
         user_password: 'password2',
-        user_birthday: new Date(),
+        user_birthday: date,
       },
     ]),
     findOne: jest.fn().mockImplementation((id: string) => {
@@ -39,7 +40,7 @@ describe('UserController', () => {
         user_email: 'test@example.com',
         user_name: 'Test User',
         user_password: 'password',
-        user_birthday: new Date(),
+        user_birthday: date,
       });
     }),
     remove: jest.fn().mockResolvedValue(undefined),
@@ -77,7 +78,7 @@ describe('UserController', () => {
         user_email: 'test@example.com',
         user_name: 'Test User',
         user_password: 'password',
-        user_birthday: new Date(),
+        user_birthday: date,
       };
 
       expect(await controller.create(createUserDto)).toEqual({
@@ -96,14 +97,14 @@ describe('UserController', () => {
           user_email: 'test1@example.com',
           user_name: 'Test User 1',
           user_password: 'password1',
-          user_birthday: new Date(),
+          user_birthday: date,
         },
         {
           user_id: expect.any(String),
           user_email: 'test2@example.com',
           user_name: 'Test User 2',
           user_password: 'password2',
-          user_birthday: new Date(),
+          user_birthday: date,
         },
       ]);
       expect(service.findAll).toHaveBeenCalled();
@@ -118,7 +119,7 @@ describe('UserController', () => {
         user_email: 'test@example.com',
         user_name: 'Test User',
         user_password: 'password',
-        user_birthday: new Date(),
+        user_birthday: date,
       });
       expect(service.findOne).toHaveBeenCalledWith(userId);
     });

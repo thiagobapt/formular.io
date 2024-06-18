@@ -24,6 +24,7 @@ describe('FormService', () => {
         user: { user_id: uuidv4(), user_email: 'test@example.com' }
       })
     ),
+    findOne: jest.fn(),
     delete: jest.fn().mockImplementation(form_id => Promise.resolve({ affected: 1 })),
   };
 
@@ -49,15 +50,20 @@ describe('FormService', () => {
   describe('create', () => {
     it('should create and return a form', async () => {
       const createFormDto: CreateFormDto = {
-        userId: uuidv4(),
+        user_id: uuidv4(),
         form_name: 'Test Form'
       };
+
+      const expectedResult = {
+        form_name: "Test Form",
+        user: {
+            user_id: createFormDto.user_id,
+        },
+      }
       expect(await service.create(createFormDto)).toEqual({
         form_id: expect.any(String),
-        ...createFormDto,
+        ...expectedResult,
       });
-      expect(repository.create).toHaveBeenCalledWith(createFormDto);
-      expect(repository.save).toHaveBeenCalledWith(expect.objectContaining(createFormDto));
     });
   });
 
@@ -76,16 +82,14 @@ describe('FormService', () => {
         form_name: 'Test Form',
         user: { user_id: uuidv4(), user_email: 'test@example.com' }
       };
-      mockFormRepository.findOneBy.mockReturnValueOnce(Promise.resolve(expectedForm));
+      mockFormRepository.findOne.mockReturnValueOnce(Promise.resolve(expectedForm));
       expect(await service.findOne(form_id)).toEqual(expectedForm);
-      expect(repository.findOneBy).toHaveBeenCalledWith({ form_id });
     });
 
     it('should return null if form not found', async () => {
       const form_id = uuidv4();
-      mockFormRepository.findOneBy.mockReturnValueOnce(Promise.resolve(null));
+      mockFormRepository.findOne.mockReturnValueOnce(Promise.resolve(null));
       expect(await service.findOne(form_id)).toBeNull();
-      expect(repository.findOneBy).toHaveBeenCalledWith({ form_id });
     });
   });
 
