@@ -71,3 +71,15 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Requisitos Necessários para executar o back-end :
+
+npm install -g @nestjs/cli
+
+Arquivo .env
+
+Npm i
+
+Create database formulario
+
+
